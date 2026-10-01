@@ -17,7 +17,13 @@
 
 import pytest
 
-pytest.skip(allow_module_level=True)
+pytest.skip(
+    "test_cache_ops requires a CUDA-capable GPU and the aibrix_kvcache "
+    "_custom_ops extension compiled against vllm==0.10.2. "
+    "These tests are not run in the standard CPU-only CI environment; "
+    "run them manually on a machine with a CUDA GPU and vllm installed.",
+    allow_module_level=True,
+)
 
 import random
 

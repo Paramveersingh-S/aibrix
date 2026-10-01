@@ -39,7 +39,14 @@ from .conftest import (
     randomize_cache_handle,
 )
 
-pytest.skip(allow_module_level=True)
+pytest.skip(
+    "test_group_aware_cache_manager requires multiple CUDA GPUs with "
+    "torch.distributed (torch.multiprocessing spawn) and the aibrix_kvcache "
+    "package installed with CUDA support. "
+    "These tests are not run in the standard CPU-only CI environment; "
+    "run them manually on a multi-GPU machine.",
+    allow_module_level=True,
+)
 cache_manager.TESTING_DISABLE_PIN_MEMORY = True
 
 

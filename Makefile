@@ -150,6 +150,17 @@ test-code-coverage: test
 test-race-condition: manifests generate fmt vet envtest ## Run tests with race detection enabled.
 	KUBEBUILDER_ASSETS="$(shell $(ENVTEST) use $(ENVTEST_K8S_VERSION) --bin-dir $(LOCALBIN) -p path)" go test -race $$(go list ./... | grep -v '/e2e\|/integration')
 
+.PHONY: test-zmq
+test-zmq: manifests generate fmt vet envtest ## Run ZMQ-tagged unit tests (requires libzmq3-dev).
+	@echo "Running ZMQ-tagged unit tests..."
+	KUBEBUILDER_ASSETS="$(shell $(ENVTEST) use $(ENVTEST_K8S_VERSION) --bin-dir $(LOCALBIN) -p path)" go test -tags=zmq ./pkg/kvevent/... ./pkg/cache/...
+
+.PHONY: test-race-condition-zmq
+test-race-condition-zmq: manifests generate fmt vet envtest ## Run ZMQ-tagged tests with race detection (requires libzmq3-dev).
+	@echo "Running ZMQ-tagged race tests..."
+	KUBEBUILDER_ASSETS="$(shell $(ENVTEST) use $(ENVTEST_K8S_VERSION) --bin-dir $(LOCALBIN) -p path)" go test -race -tags=zmq ./pkg/kvevent/... ./pkg/cache/...
+
+
 .PHONY: test-integration test-integration-webhook test-integration-controller test-integration-gateway
 test-integration: manifests fmt vet envtest ginkgo
 	@echo "Running all integration tests..."
